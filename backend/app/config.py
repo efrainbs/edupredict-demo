@@ -1,7 +1,9 @@
 import os
 from pathlib import Path
 
-JWT_SECRET = os.getenv("JWT_SECRET", "dev-jwt-secret")
+JWT_SECRET = os.getenv(
+    "JWT_SECRET", "dev-jwt-secret-change-me-32-bytes-min"
+)
 PSEUDO_SECRET = os.getenv("PSEUDO_SECRET", "dev-pseudo-secret")
 
 BACKEND_DIR = Path(__file__).resolve().parents[1]

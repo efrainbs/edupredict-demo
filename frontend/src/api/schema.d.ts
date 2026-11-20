@@ -21,10 +21,332 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/auth/login": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Login */
+        post: operations["login_api_auth_login_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/auth/me": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Read Me */
+        get: operations["read_me_api_auth_me_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/faculties": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Faculties */
+        get: operations["list_faculties_api_faculties_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/dashboard/summary": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Dashboard Summary */
+        get: operations["dashboard_summary_api_dashboard_summary_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/dashboard/trend": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Dashboard Trend */
+        get: operations["dashboard_trend_api_dashboard_trend_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/dashboard/risk-by-faculty": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Dashboard Risk By Faculty */
+        get: operations["dashboard_risk_by_faculty_api_dashboard_risk_by_faculty_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/model/info": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Model Info */
+        get: operations["model_info_api_model_info_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/tutor/summary": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Tutor Summary */
+        get: operations["tutor_summary_api_tutor_summary_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/students": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Students */
+        get: operations["list_students_api_students_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/students/{student_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Student Detail */
+        get: operations["student_detail_api_students__student_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/students/{student_id}/interventions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Interventions */
+        get: operations["list_interventions_api_students__student_id__interventions_get"];
+        put?: never;
+        /** Create Intervention */
+        post: operations["create_intervention_api_students__student_id__interventions_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        /** AlertsSummaryOut */
+        AlertsSummaryOut: {
+            /** Pending */
+            pending: number;
+            /** Critical */
+            critical: number;
+        };
+        /** AtRiskOut */
+        AtRiskOut: {
+            /** Count */
+            count: number;
+            /** Pct */
+            pct: number;
+            /** High */
+            high: number;
+            /** Medium */
+            medium: number;
+        };
+        /** DashboardSummaryOut */
+        DashboardSummaryOut: {
+            /** Enrollment */
+            enrollment: number;
+            /** Retention Rate */
+            retention_rate: number;
+            at_risk: components["schemas"]["AtRiskOut"];
+            alerts: components["schemas"]["AlertsSummaryOut"];
+        };
+        /** DashboardTrendOut */
+        DashboardTrendOut: {
+            /** Weeks */
+            weeks: components["schemas"]["TrendWeekOut"][];
+        };
+        /** FacultyOut */
+        FacultyOut: {
+            /** Id */
+            id: number;
+            /** Name */
+            name: string;
+        };
+        /** FacultyRiskOut */
+        FacultyRiskOut: {
+            /** Faculty Id */
+            faculty_id: number;
+            /** Name */
+            name: string;
+            /** High */
+            high: number;
+            /** Medium */
+            medium: number;
+            /** Low */
+            low: number;
+        };
+        /** FeatureImportanceOut */
+        FeatureImportanceOut: {
+            /** Feature */
+            feature: string;
+            /** Label */
+            label: string;
+            /** Importance */
+            importance: number;
+        };
+        /** HTTPValidationError */
+        HTTPValidationError: {
+            /** Detail */
+            detail?: components["schemas"]["ValidationError"][];
+        };
+        /** IndicatorsOut */
+        IndicatorsOut: {
+            /** Gpa Avg */
+            gpa_avg: number;
+            /** Attendance Rate */
+            attendance_rate: number;
+            /** Lms Participation */
+            lms_participation: number;
+            /** Tuition Debt Months */
+            tuition_debt_months: number;
+            /** Weekly Work Hours */
+            weekly_work_hours: number;
+            /** Family Support */
+            family_support: number;
+            /** Socioemotional Adaptation */
+            socioemotional_adaptation: number;
+        };
+        /** InterventionCreate */
+        InterventionCreate: {
+            /**
+             * Type
+             * @enum {string}
+             */
+            type: "seguimiento" | "reunion" | "mensaje";
+            /** Note */
+            note: string;
+            /** Scheduled At */
+            scheduled_at?: string | null;
+        };
+        /** InterventionOut */
+        InterventionOut: {
+            /** Id */
+            id: number;
+            /**
+             * Type
+             * @enum {string}
+             */
+            type: "seguimiento" | "reunion" | "mensaje";
+            /** Note */
+            note: string;
+            /** Scheduled At */
+            scheduled_at: string | null;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Tutor Name */
+            tutor_name: string;
+        };
+        /** LoginRequest */
+        LoginRequest: {
+            /** Email */
+            email: string;
+            /** Password */
+            password: string;
+        };
+        /** LoginResponse */
+        LoginResponse: {
+            /** Access Token */
+            access_token: string;
+            /**
+             * Token Type
+             * @default bearer
+             */
+            token_type: string;
+            user: components["schemas"]["UserOut"];
+        };
         /** MetaResponse */
         MetaResponse: {
             /** Demo Mode */
@@ -35,6 +357,164 @@ export interface components {
             institution: string;
             /** Period */
             period: string;
+        };
+        /** ModelInfoOut */
+        ModelInfoOut: {
+            /** Algorithm */
+            algorithm: string;
+            /**
+             * Trained At
+             * Format: date-time
+             */
+            trained_at: string;
+            /** N Train */
+            n_train: number;
+            metrics: components["schemas"]["ModelMetricsOut"];
+            /** Data Source */
+            data_source: string;
+            /** Disclaimer */
+            disclaimer: string;
+            /** Feature Importance */
+            feature_importance: components["schemas"]["FeatureImportanceOut"][];
+        };
+        /** ModelMetricsOut */
+        ModelMetricsOut: {
+            /** F1 */
+            f1: number;
+            /** Precision */
+            precision: number;
+            /** Recall */
+            recall: number;
+            /** Pr Auc */
+            pr_auc: number;
+        };
+        /** RiskByFacultyOut */
+        RiskByFacultyOut: {
+            /** Faculties */
+            faculties: components["schemas"]["FacultyRiskOut"][];
+        };
+        /** RiskDetailOut */
+        RiskDetailOut: {
+            /**
+             * Level
+             * @enum {string}
+             */
+            level: "alto" | "medio" | "bajo";
+            /** Probability */
+            probability: number;
+            /** Score */
+            score: number;
+            /** Main Factor */
+            main_factor: string;
+            /**
+             * Computed At
+             * Format: date-time
+             */
+            computed_at: string;
+            /** Top Factors */
+            top_factors: components["schemas"]["TopFactorOut"][];
+            /** Disclaimer */
+            disclaimer: string;
+        };
+        /** StudentDetailOut */
+        StudentDetailOut: {
+            /** Id */
+            id: number;
+            /** Code */
+            code: string;
+            /** Full Name */
+            full_name: string;
+            /** Career */
+            career: string;
+            /** Faculty */
+            faculty: string;
+            /** Cycle */
+            cycle: number;
+            risk: components["schemas"]["RiskDetailOut"];
+            indicators: components["schemas"]["IndicatorsOut"];
+            /** Interventions */
+            interventions: components["schemas"]["InterventionOut"][];
+        };
+        /** StudentListItemOut */
+        StudentListItemOut: {
+            /** Id */
+            id: number;
+            /** Code */
+            code: string;
+            /** Full Name */
+            full_name: string;
+            /** Career */
+            career: string;
+            /** Cycle */
+            cycle: number;
+            /**
+             * Risk Level
+             * @enum {string}
+             */
+            risk_level: "alto" | "medio" | "bajo";
+            /** Probability */
+            probability: number;
+            /** Main Factor */
+            main_factor: string;
+            /** Reasons */
+            reasons: string[];
+            /** Pending Alerts */
+            pending_alerts: number;
+            /** Last Contact At */
+            last_contact_at: string | null;
+        };
+        /** TopFactorOut */
+        TopFactorOut: {
+            /** Feature */
+            feature: string;
+            /** Group */
+            group: string;
+            /** Impact */
+            impact: number;
+            /** Text */
+            text: string;
+        };
+        /** TrendWeekOut */
+        TrendWeekOut: {
+            /** Week */
+            week: number;
+            /** Real Dropout Pct */
+            real_dropout_pct: number;
+            /** Projected Risk Pct */
+            projected_risk_pct: number;
+        };
+        /** TutorSummaryOut */
+        TutorSummaryOut: {
+            /** Tutor Name */
+            tutor_name: string;
+            /** In Observation */
+            in_observation: number;
+            /** Critical Pending */
+            critical_pending: number;
+        };
+        /** UserOut */
+        UserOut: {
+            /** Id */
+            id: number;
+            /** Name */
+            name: string;
+            /** Role */
+            role: string;
+            /** Tutor Id */
+            tutor_id: number | null;
+        };
+        /** ValidationError */
+        ValidationError: {
+            /** Location */
+            loc: (string | number)[];
+            /** Message */
+            msg: string;
+            /** Error Type */
+            type: string;
+            /** Input */
+            input?: unknown;
+            /** Context */
+            ctx?: Record<string, never>;
         };
     };
     responses: never;
@@ -61,6 +541,330 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["MetaResponse"];
+                };
+            };
+        };
+    };
+    login_api_auth_login_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LoginRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LoginResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    read_me_api_auth_me_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UserOut"];
+                };
+            };
+        };
+    };
+    list_faculties_api_faculties_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FacultyOut"][];
+                };
+            };
+        };
+    };
+    dashboard_summary_api_dashboard_summary_get: {
+        parameters: {
+            query?: {
+                faculty_id?: number | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DashboardSummaryOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    dashboard_trend_api_dashboard_trend_get: {
+        parameters: {
+            query?: {
+                faculty_id?: number | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DashboardTrendOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    dashboard_risk_by_faculty_api_dashboard_risk_by_faculty_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RiskByFacultyOut"];
+                };
+            };
+        };
+    };
+    model_info_api_model_info_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ModelInfoOut"];
+                };
+            };
+        };
+    };
+    tutor_summary_api_tutor_summary_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TutorSummaryOut"];
+                };
+            };
+        };
+    };
+    list_students_api_students_get: {
+        parameters: {
+            query?: {
+                risk?: ("alto" | "medio" | "bajo") | null;
+                q?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StudentListItemOut"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    student_detail_api_students__student_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                student_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StudentDetailOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_interventions_api_students__student_id__interventions_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                student_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InterventionOut"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    create_intervention_api_students__student_id__interventions_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                student_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["InterventionCreate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InterventionOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };
