@@ -1,67 +1,133 @@
-import { useQuery } from "@tanstack/react-query";
+import type { ReactNode } from "react";
+import { BrainCircuit, UploadCloud, Users } from "lucide-react";
+import {
+  Navigate,
+  Route,
+  Routes,
+  useLocation,
+} from "react-router-dom";
 
-import type { components } from "./api/schema";
+import { AppLayout } from "@/components/AppLayout";
+import { FullPageLoading } from "@/components/FullPageLoading";
+import { DashboardPage } from "@/pages/DashboardPage";
+import { LoginPage } from "@/pages/LoginPage";
+import { PlaceholderPage } from "@/pages/PlaceholderPage";
+import { homePathForRole, useAuth } from "@/lib/auth";
 
-type Meta = components["schemas"]["MetaResponse"];
+function RequireAuth({ children }: { children: ReactNode }) {
+  const { user, isLoading } = useAuth();
+  const location = useLocation();
 
-const fallbackBanner = "Datos de demostración (sintéticos) — no representan estudiantes reales";
-
-async function fetchMeta(): Promise<Meta> {
-  const response = await fetch("/api/meta");
-  if (!response.ok) {
-    throw new Error("No se pudo cargar la información de la demo");
+  if (isLoading) {
+    return <FullPageLoading />;
   }
-  return response.json();
+  if (!user) {
+    return (
+      <Navigate
+        to="/login"
+        replace
+        state={{ from: location.pathname }}
+      />
+    );
+  }
+  return children;
+}
+
+function RoleRoute({
+  role,
+  children,
+}: {
+  role: "director" | "tutor";
+  children: ReactNode;
+}) {
+  const { user, isLoading } = useAuth();
+
+  if (isLoading) {
+    return <FullPageLoading />;
+  }
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+  if (user.role !== role) {
+    return <Navigate to={homePathForRole(user.role)} replace />;
+  }
+  return children;
+}
+
+function IndexRedirect() {
+  const { user, isLoading } = useAuth();
+
+  if (isLoading) {
+    return <FullPageLoading />;
+  }
+  return (
+    <Navigate
+      to={user ? homePathForRole(user.role) : "/login"}
+      replace
+    />
+  );
 }
 
 export default function App() {
-  const { data, isError } = useQuery({ queryKey: ["meta"], queryFn: fetchMeta });
-  const banner = data?.banner ?? fallbackBanner;
-
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900">
-      <div className="bg-indigo-600 px-4 py-2 text-center text-xs font-medium text-white">
-        {banner}
-      </div>
+    <Routes>
+      <Route path="/login" element={<LoginPage />} />
 
-      <main className="mx-auto flex max-w-5xl flex-col gap-8 px-6 py-16">
-        <header className="flex items-center gap-4">
-          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-indigo-600 text-lg font-bold text-white">
-            EP
-          </div>
-          <div>
-            <h1 className="text-2xl font-semibold tracking-tight">EduPredict AI</h1>
-            <p className="text-sm text-slate-500">
-              {data?.institution ?? "Instituto Superior Andino (demo)"} · Periodo{" "}
-              {data?.period ?? "2026-2"}
-            </p>
-          </div>
-        </header>
+      <Route
+        element={
+          <RequireAuth>
+            <AppLayout />
+          </RequireAuth>
+        }
+      >
+        <Route
+          path="/dashboard"
+          element={
+            <RoleRoute role="director">
+              <DashboardPage />
+            </RoleRoute>
+          }
+        />
+        <Route
+          path="/upload"
+          element={
+            <RoleRoute role="director">
+              <PlaceholderPage
+                icon={UploadCloud}
+                title="Carga de datos"
+                description="La carga de CSV, el pipeline por pasos y la actualización de riesgos se habilitan en el siguiente avance de la demo."
+              />
+            </RoleRoute>
+          }
+        />
+        <Route
+          path="/model"
+          element={
+            <RoleRoute role="director">
+              <PlaceholderPage
+                icon={BrainCircuit}
+                title="Panel de modelo"
+                description="Las métricas del modelo activo y la importancia de variables se habilitan en el siguiente avance de la demo."
+              />
+            </RoleRoute>
+          }
+        />
+        <Route
+          path="/students"
+          element={
+            <RoleRoute role="tutor">
+              <PlaceholderPage
+                icon={Users}
+                title="Mis estudiantes"
+                description="La lista filtrable, el detalle de riesgo y el registro de intervenciones se habilitan en el siguiente avance de la demo."
+              />
+            </RoleRoute>
+          }
+        />
+      </Route>
 
-        <section className="rounded-xl border border-slate-200 bg-white p-8 shadow-sm">
-          <p className="text-xs font-semibold uppercase tracking-widest text-indigo-600">
-            Hito 0 · Esqueleto
-          </p>
-          <h2 className="mt-3 text-3xl font-semibold tracking-tight">
-            Base lista para la demo
-          </h2>
-          <p className="mt-3 max-w-2xl text-slate-600">
-            Backend FastAPI, frontend React y tipos generados desde OpenAPI. El siguiente
-            paso es cargar los datos sintéticos de la institución.
-          </p>
-
-          {isError ? (
-            <p className="mt-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
-              No se pudo conectar con la API. Verifica que el backend esté disponible en
-              http://localhost:8000.
-            </p>
-          ) : (
-            <p className="mt-6 text-sm text-emerald-700">
-              API conectada: datos de demostración disponibles.
-            </p>
-          )}
-        </section>
-      </main>
-    </div>
+      <Route path="/" element={<IndexRedirect />} />
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
   );
 }
