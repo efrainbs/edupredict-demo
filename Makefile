@@ -19,7 +19,7 @@ seed:
 	cd $(BACKEND) && .venv/bin/python -m ml.generate_data
 
 train:
-	@echo "pendiente — Hito 2"
+	cd $(BACKEND) && .venv/bin/python -m ml.train
 
 dev:
 	@echo "API: http://localhost:8000 · Frontend: http://localhost:5173"

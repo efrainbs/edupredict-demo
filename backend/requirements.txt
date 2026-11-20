@@ -6,3 +6,7 @@ bcrypt>=4.2,<5
 numpy>=1.26,<3
 pytest>=8.3,<9
 httpx>=0.28,<1
+pandas>=2.2,<3
+scikit-learn>=1.5,<2
+xgboost>=2.1,<4
+shap>=0.46,<1

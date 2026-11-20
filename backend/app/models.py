@@ -100,7 +100,7 @@ class ModelVersion(SQLModel, table=True):
     precision: float
     recall: float
     pr_auc: float
-    threshold: float
+    threshold: dict = Field(default_factory=dict, sa_column=Column(JSON))
     feature_importance: list[dict] = Field(default_factory=list, sa_column=Column(JSON))
     is_active: bool = False
     data_source: str = "synthetic"
