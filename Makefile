@@ -16,7 +16,7 @@ setup:
 	$(MAKE) gen-types
 
 seed:
-	@echo "pendiente — Hito 1"
+	cd $(BACKEND) && .venv/bin/python -m ml.generate_data
 
 train:
 	@echo "pendiente — Hito 2"

@@ -12,7 +12,7 @@ Prototipo de demostración de una plataforma que predice riesgo de deserción es
 
 ```bash
 make setup       # instala backend y frontend, y genera los tipos
-make seed        # pendiente — Hito 1
+make seed        # crea la BD y genera los datos sintéticos
 make train       # pendiente — Hito 2
 make dev         # API en :8000 y frontend en :5173
 make test        # pytest + typecheck + build
