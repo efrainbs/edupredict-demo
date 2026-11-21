@@ -9,6 +9,14 @@ export type DashboardTrend = components["schemas"]["DashboardTrendOut"];
 export type RiskByFaculty = components["schemas"]["RiskByFacultyOut"];
 export type FacultyRisk = components["schemas"]["FacultyRiskOut"];
 export type TrendWeek = components["schemas"]["TrendWeekOut"];
+export type TutorSummary = components["schemas"]["TutorSummaryOut"];
+export type StudentListItem = components["schemas"]["StudentListItemOut"];
+export type StudentDetail = components["schemas"]["StudentDetailOut"];
+export type Intervention = components["schemas"]["InterventionOut"];
+export type InterventionCreate = components["schemas"]["InterventionCreate"];
+export type TopFactor = components["schemas"]["TopFactorOut"];
+export type RiskLevel = StudentListItem["risk_level"];
+export type InterventionType = Intervention["type"];
 
 const TOKEN_KEY = "edupredict.token";
 const USER_KEY = "edupredict.user";
@@ -119,4 +127,25 @@ export const api = {
   dashboardTrend: () => request<DashboardTrend>("/dashboard/trend"),
   riskByFaculty: () =>
     request<RiskByFaculty>("/dashboard/risk-by-faculty"),
+  tutorSummary: () => request<TutorSummary>("/tutor/summary"),
+  students: (params: { risk?: RiskLevel; q?: string } = {}) => {
+    const search = new URLSearchParams();
+    if (params.risk) {
+      search.set("risk", params.risk);
+    }
+    if (params.q?.trim()) {
+      search.set("q", params.q.trim());
+    }
+    const query = search.toString();
+    return request<StudentListItem[]>(
+      `/students${query ? `?${query}` : ""}`,
+    );
+  },
+  studentDetail: (id: number) =>
+    request<StudentDetail>(`/students/${id}`),
+  createIntervention: (id: number, payload: InterventionCreate) =>
+    request<Intervention>(`/students/${id}/interventions`, {
+      method: "POST",
+      body: JSON.stringify(payload),
+    }),
 };

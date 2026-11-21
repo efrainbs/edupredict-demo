@@ -13,6 +13,7 @@ import { useMeta } from "@/api/hooks";
 import { Button } from "@/components/ui/button";
 import { DemoBanner } from "@/components/DemoBanner";
 import { roleLabel, useAuth } from "@/lib/auth";
+import { initials } from "@/lib/format";
 import { cn } from "@/lib/utils";
 
 type NavItem = {
@@ -27,17 +28,6 @@ const pageTitles: Record<string, string> = {
   "/model": "Panel de modelo",
   "/students": "Mis estudiantes",
 };
-
-function initials(name: string): string {
-  return name
-    .replace(/^Prof\.\s*/i, "")
-    .split(" ")
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((part) => part[0])
-    .join("")
-    .toUpperCase();
-}
 
 function NavSection({
   title,
@@ -106,7 +96,9 @@ export function AppLayout() {
         ]
       : [];
 
-  const title = pageTitles[location.pathname] ?? "EduPredict";
+  const title = /^\/students\/[^/]+$/.test(location.pathname)
+    ? "Detalle de estudiante"
+    : pageTitles[location.pathname] ?? "EduPredict";
 
   return (
     <div className="flex min-h-screen flex-col bg-slate-50 text-slate-900">

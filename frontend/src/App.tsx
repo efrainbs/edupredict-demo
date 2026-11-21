@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { BrainCircuit, UploadCloud, Users } from "lucide-react";
+import { BrainCircuit, UploadCloud } from "lucide-react";
 import {
   Navigate,
   Route,
@@ -12,6 +12,8 @@ import { FullPageLoading } from "@/components/FullPageLoading";
 import { DashboardPage } from "@/pages/DashboardPage";
 import { LoginPage } from "@/pages/LoginPage";
 import { PlaceholderPage } from "@/pages/PlaceholderPage";
+import { StudentDetailPage } from "@/pages/StudentDetailPage";
+import { StudentsPage } from "@/pages/StudentsPage";
 import { homePathForRole, useAuth } from "@/lib/auth";
 
 function RequireAuth({ children }: { children: ReactNode }) {
@@ -116,11 +118,15 @@ export default function App() {
           path="/students"
           element={
             <RoleRoute role="tutor">
-              <PlaceholderPage
-                icon={Users}
-                title="Mis estudiantes"
-                description="La lista filtrable, el detalle de riesgo y el registro de intervenciones se habilitan en el siguiente avance de la demo."
-              />
+              <StudentsPage />
+            </RoleRoute>
+          }
+        />
+        <Route
+          path="/students/:id"
+          element={
+            <RoleRoute role="tutor">
+              <StudentDetailPage />
             </RoleRoute>
           }
         />
