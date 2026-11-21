@@ -173,3 +173,51 @@ class InterventionCreate(BaseModel):
     type: InterventionType
     note: str = Field(min_length=1, max_length=500)
     scheduled_at: datetime | None = None
+
+
+class PipelineStepOut(BaseModel):
+    key: str
+    label: str
+    detail: str
+
+
+class PipelineErrorOut(BaseModel):
+    row: int
+    column: str
+    reason: str
+
+
+class RiskDistributionOut(BaseModel):
+    high: int
+    medium: int
+    low: int
+
+
+class ModelViewRowOut(BaseModel):
+    pseudo_id: str
+    gpa_avg: float
+    grade_trend: float
+    last_exam_grade: float
+    failed_courses: int
+    attendance_rate: float
+    consecutive_absences: int
+    lms_participation: float
+    late_assignments_rate: float
+    tuition_debt_months: int
+    scholarship: int
+    weekly_work_hours: int
+    commute_minutes: int
+    family_support: int
+    socioemotional_adaptation: int
+    shift: str
+    cycle: int
+    age: int
+
+
+class UploadResultOut(BaseModel):
+    run_id: int
+    steps: list[PipelineStepOut]
+    errors: list[PipelineErrorOut]
+    distribution_before: RiskDistributionOut
+    distribution_after: RiskDistributionOut
+    model_view_sample: list[ModelViewRowOut]

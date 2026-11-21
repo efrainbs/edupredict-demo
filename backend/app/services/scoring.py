@@ -23,13 +23,25 @@ def score_students(
     model: Any,
     explainer: Any,
     model_version: ModelVersion,
+    thresholds: dict[str, float] | None = None,
 ) -> dict[str, Any]:
     rows = session.exec(select(StudentFeature)).all()
     frame = feature_frame(rows)
     probabilities = model.predict_proba(frame)[:, 1]
 
-    high_threshold = float(np.percentile(probabilities, RISK_HIGH_PERCENTILE))
-    medium_threshold = float(np.percentile(probabilities, RISK_MEDIUM_PERCENTILE))
+    if thresholds is None:
+        high_threshold = float(np.percentile(probabilities, RISK_HIGH_PERCENTILE))
+        medium_threshold = float(
+            np.percentile(probabilities, RISK_MEDIUM_PERCENTILE)
+        )
+        model_version.threshold = {
+            "high": round(high_threshold, 6),
+            "medium": round(medium_threshold, 6),
+        }
+    else:
+        high_threshold = float(thresholds["high"])
+        medium_threshold = float(thresholds["medium"])
+
     shap_values = shap_matrix(explainer, frame)
 
     students = {
@@ -48,6 +60,8 @@ def score_students(
 
     now = utc_now()
     counts = {"alto": 0, "medio": 0, "bajo": 0}
+    alerts_new = 0
+    alerts_closed = 0
 
     for index, row in enumerate(rows):
         probability = float(probabilities[index])
@@ -87,6 +101,7 @@ def score_students(
                 for extra in pending[1:]:
                     extra.status = "cerrada"
                     extra.resolved_at = now
+                    alerts_closed += 1
             else:
                 session.add(
                     Alert(
@@ -98,10 +113,12 @@ def score_students(
                         created_at=now,
                     )
                 )
+                alerts_new += 1
         else:
             for alert in pending:
                 alert.status = "cerrada"
                 alert.resolved_at = now
+                alerts_closed += 1
 
     total = len(rows)
     at_risk = counts["alto"] + counts["medio"]
@@ -112,10 +129,6 @@ def score_students(
         snapshot.projected_risk_pct = at_risk_pct
         session.add(snapshot)
 
-    model_version.threshold = {
-        "high": round(high_threshold, 6),
-        "medium": round(medium_threshold, 6),
-    }
     session.add(model_version)
     session.flush()
 
@@ -130,4 +143,6 @@ def score_students(
         "high_threshold": round(high_threshold, 6),
         "medium_threshold": round(medium_threshold, 6),
         "at_risk_pct": at_risk_pct,
+        "alerts_new": alerts_new,
+        "alerts_closed": alerts_closed,
     }

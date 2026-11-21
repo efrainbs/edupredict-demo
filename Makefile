@@ -41,4 +41,4 @@ gen-types:
 	cd $(FRONTEND) && npx openapi-typescript src/api/openapi.json -o src/api/schema.d.ts
 
 demo-csv:
-	@echo "pendiente — Hito 6"
+	cd $(BACKEND) && .venv/bin/python scripts/generate_demo_csv.py

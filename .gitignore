@@ -12,3 +12,4 @@ backend/data/*.db-*
 backend/ml/artifacts/*
 !backend/ml/artifacts/.gitkeep
 frontend/src/api/openapi.json
+backend/data/demo_upload.csv
