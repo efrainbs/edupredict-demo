@@ -88,7 +88,7 @@ Campos: tipo (Seguimiento / Reunión / Mensaje), nota (obligatoria, máx. 500 ca
 | Min | Acción | Qué debe verse |
 |---|---|---|
 | 0:00 | Login como Directivo | Dashboard con KPIs, tendencia y barras por facultad. Filtrar por "Ingeniería" y volver a "Todas". |
-| 1:15 | Ir a **Carga de datos**, subir `data/demo_upload.csv` | Pipeline por pasos con conteos; comparación antes/después; las alertas pendientes suben. Volver al dashboard: los KPIs cambiaron. |
+| 1:15 | Ir a **Carga de datos**, subir `backend/data/demo_upload.csv` | Pipeline por pasos con conteos; comparación antes/después; las alertas pendientes suben. Volver al dashboard: los KPIs cambiaron. |
 | 2:30 | Cerrar sesión, login como Tutor 1 | Banner con estudiantes en observación y alertas críticas. **Diego Torres Ruiz** (antes Bajo) ahora aparece en riesgo Alto tras la carga. |
 | 3:15 | Abrir un estudiante en riesgo Alto, registrar un seguimiento | Factores explicados, aviso "señal, no etiqueta"; la alerta pasa a atendida y el contador baja. |
 | 4:15 | Con Tutor 1, abrir manualmente la URL de un estudiante de Tutor 2 | "No tienes acceso a este estudiante" (control de acceso). |

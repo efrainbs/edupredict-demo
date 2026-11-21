@@ -23,6 +23,21 @@ make dev         # API en :8000 y frontend en :5173
 Abre http://localhost:5173. El frontend hace proxy de `/api` hacia http://localhost:8000.
 Documentación de la API en http://localhost:8000/docs.
 
+## Configuración
+
+Variables de entorno opcionales (los valores de desarrollo están en
+`backend/app/config.py`):
+
+| Variable | Uso |
+|---|---|
+| `JWT_SECRET` | Firma de los tokens de sesión. |
+| `PSEUDO_SECRET` | HMAC para calcular `pseudo_id`; cambiarlo invalida los seudónimos existentes. |
+| `PLAYWRIGHT_CHROMIUM_PATH` | Ruta al ejecutable de Chromium para `make e2e` (por defecto `/usr/bin/chromium`). |
+
+La BD vive en `backend/data/edupredict.db` y los artefactos del modelo en
+`backend/ml/artifacts/`; ambos están ignorados por git y se regeneran con `make seed` y
+`make train`.
+
 ## Comandos
 
 ```bash

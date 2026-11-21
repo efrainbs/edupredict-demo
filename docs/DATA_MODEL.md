@@ -22,7 +22,7 @@ BD: SQLite vía SQLModel. Campos JSON con `sa_column=Column(JSON)`. Fechas en UT
 ### Resultados y operación
 | Tabla | Campos |
 |---|---|
-| `model_versions` | `id`, `algorithm`, `trained_at`, `n_train`, `f1`, `precision`, `recall`, `pr_auc`, `threshold`, `feature_importance` (JSON: lista `{feature, importance}`), `is_active`, `data_source` (siempre `"synthetic"`) |
+| `model_versions` | `id`, `algorithm`, `trained_at`, `n_train`, `f1`, `precision`, `recall`, `pr_auc`, `threshold` (JSON: `{high, medium}`), `feature_importance` (JSON: lista `{feature, importance}`), `is_active`, `data_source` (siempre `"synthetic"`) |
 | `risk_scores` | `student_id` (PK; solo el último puntaje), `probability` (0–1), `level` (`alto`\|`medio`\|`bajo`), `main_factor` (grupo o `"Ninguno"`), `top_factors` (JSON, ver §6), `model_version_id`, `computed_at` |
 | `alerts` | `id`, `student_id`, `level`, `main_factor`, `reasons` (JSON lista de strings), `status` (`pendiente`\|`atendida`\|`cerrada`), `created_at`, `resolved_at` |
 | `interventions` | `id`, `student_id`, `tutor_id`, `type` (`seguimiento`\|`reunion`\|`mensaje`), `note`, `scheduled_at` (nulo salvo reunión), `created_at` |
@@ -172,4 +172,4 @@ commute_minutes,family_support,socioemotional_adaptation,shift,age
 ```
 Validaciones (fila rechazada con motivo si falla): código no vacío; `career` existente; `tutor_name` existente (tabla `tutors`) para estudiantes nuevos (para existentes se conserva el tutor); rangos de la tabla §2; `shift` ∈ {diurno, nocturno}; sin duplicados de código en el archivo. Filas válidas se procesan aunque otras se rechacen.
 
-`make demo-csv` genera `data/demo_upload.csv` con ~200 filas: ~120 estudiantes existentes con indicadores empeorados (más deuda, menos asistencia, menos LMS), **incluido Diego Torres Ruiz** (debe quedar en Alto), 60 existentes sin cambios, 15 estudiantes nuevos y **3 filas inválidas** a propósito (para mostrar la tabla de errores).
+`make demo-csv` genera `backend/data/demo_upload.csv` con ~200 filas: ~120 estudiantes existentes con indicadores empeorados (más deuda, menos asistencia, menos LMS), **incluido Diego Torres Ruiz** (debe quedar en Alto), 60 existentes sin cambios, 15 estudiantes nuevos y **3 filas inválidas** a propósito (para mostrar la tabla de errores).

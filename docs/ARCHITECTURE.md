@@ -18,7 +18,7 @@ procesamiento de datos personales de estudiantes reales.
 │  routers/: auth · dashboard · students · interventions · upload · model   │
 │  deps/: require_role(director|tutor) · ownership check                   │
 └───────┬───────────────────────────────┬──────────────────────────────────┘
-        │ SQLModel                      │ pickle/JSON
+        │ SQLModel                      │ JSON
         ▼                               ▼
 ┌───────────────────────────┐   ┌──────────────────────────────────────────┐
 │ SQLite                    │   │ Artefactos ML                            │

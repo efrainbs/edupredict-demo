@@ -101,7 +101,7 @@ Prompt base (cambia el número de hito):
 - Pantallas `/upload` (zona de carga, pipeline por pasos, errores, antes/después, "lo que ve el modelo") y `/model`.
 
 **Aceptación**
-- [ ] Ejecutar `make demo-csv` y subir `data/demo_upload.csv` desde la UI: muestra 5 pasos con conteos, 3 filas rechazadas en la tabla de errores y distribución antes → después con más riesgo Alto.
+- [ ] Ejecutar `make demo-csv` y subir `backend/data/demo_upload.csv` desde la UI: muestra 5 pasos con conteos, 3 filas rechazadas en la tabla de errores y distribución antes → después con más riesgo Alto.
 - [ ] Tras la carga, `/dashboard` refleja nuevos KPIs; **Diego Torres Ruiz** pasa a Alto y aparece con alerta pendiente para Tutor 1.
 - [ ] Test del pipeline: archivo con filas inválidas procesa las válidas; un estudiante que mejora cierra su alerta; un estudiante nuevo se crea con `pseudo_id`.
 - [ ] El bloque "Lo que ve el modelo" no muestra nombre ni código.
