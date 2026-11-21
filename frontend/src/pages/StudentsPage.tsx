@@ -1,4 +1,9 @@
-import { useCallback, useState, type KeyboardEvent } from "react";
+import {
+  useCallback,
+  useEffect,
+  useState,
+  type KeyboardEvent,
+} from "react";
 import {
   AlertTriangle,
   Loader2,
@@ -269,6 +274,26 @@ export function StudentsPage() {
   const [toast, setToast] = useState<string | null>(null);
   const closeToast = useCallback(() => setToast(null), []);
 
+  useEffect(() => {
+    const onKeyDown = (event: globalThis.KeyboardEvent) => {
+      if (event.key !== "/" || event.metaKey || event.ctrlKey || event.altKey) {
+        return;
+      }
+      const target = event.target as HTMLElement | null;
+      if (
+        target?.tagName === "INPUT" ||
+        target?.tagName === "TEXTAREA" ||
+        target?.isContentEditable
+      ) {
+        return;
+      }
+      event.preventDefault();
+      document.getElementById("student-search")?.focus();
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, []);
+
   const summaryQuery = useQuery({
     queryKey: ["tutor", "summary"],
     queryFn: api.tutorSummary,
@@ -341,10 +366,12 @@ export function StudentsPage() {
               <div className="relative">
                 <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
                 <Input
+                  id="student-search"
                   value={search}
                   onChange={(event) => setSearch(event.target.value)}
-                  placeholder="Buscar por nombre o código..."
+                  placeholder="Buscar por nombre o código... (/)"
                   aria-label="Buscar estudiante"
+                  aria-keyshortcuts="/"
                   className="h-9 w-64 pl-9"
                 />
               </div>

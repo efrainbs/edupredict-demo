@@ -13,3 +13,7 @@ backend/ml/artifacts/*
 !backend/ml/artifacts/.gitkeep
 frontend/src/api/openapi.json
 backend/data/demo_upload.csv
+frontend/test-results/
+frontend/playwright-report/
+frontend/blob-report/
+frontend/.playwright/

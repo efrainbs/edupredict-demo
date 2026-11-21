@@ -33,8 +33,8 @@ test:
 	cd $(FRONTEND) && npm run typecheck
 	cd $(FRONTEND) && npm run build
 
-e2e:
-	@echo "pendiente — Hito 7"
+e2e: demo-csv
+	cd $(FRONTEND) && npx playwright test
 
 gen-types:
 	cd $(BACKEND) && .venv/bin/python scripts/export_openapi.py

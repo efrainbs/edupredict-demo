@@ -11,9 +11,10 @@ import { FullPageLoading } from "@/components/FullPageLoading";
 import { DashboardPage } from "@/pages/DashboardPage";
 import { LoginPage } from "@/pages/LoginPage";
 import { ModelPage } from "@/pages/ModelPage";
-import { UploadPage } from "@/pages/UploadPage";
+import { NotFoundPage } from "@/pages/NotFoundPage";
 import { StudentDetailPage } from "@/pages/StudentDetailPage";
 import { StudentsPage } from "@/pages/StudentsPage";
+import { UploadPage } from "@/pages/UploadPage";
 import { homePathForRole, useAuth } from "@/lib/auth";
 
 function RequireAuth({ children }: { children: ReactNode }) {
@@ -125,7 +126,7 @@ export default function App() {
       </Route>
 
       <Route path="/" element={<IndexRedirect />} />
-      <Route path="*" element={<Navigate to="/" replace />} />
+      <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );
 }
