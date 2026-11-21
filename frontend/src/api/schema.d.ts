@@ -209,6 +209,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/upload/template.csv": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Upload Template */
+        get: operations["upload_template_api_upload_template_csv_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/upload": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Upload Students */
+        post: operations["upload_students_api_upload_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -230,6 +264,11 @@ export interface components {
             high: number;
             /** Medium */
             medium: number;
+        };
+        /** Body_upload_students_api_upload_post */
+        Body_upload_students_api_upload_post: {
+            /** File */
+            file: string;
         };
         /** DashboardSummaryOut */
         DashboardSummaryOut: {
@@ -388,6 +427,63 @@ export interface components {
             /** Pr Auc */
             pr_auc: number;
         };
+        /** ModelViewRowOut */
+        ModelViewRowOut: {
+            /** Pseudo Id */
+            pseudo_id: string;
+            /** Gpa Avg */
+            gpa_avg: number;
+            /** Grade Trend */
+            grade_trend: number;
+            /** Last Exam Grade */
+            last_exam_grade: number;
+            /** Failed Courses */
+            failed_courses: number;
+            /** Attendance Rate */
+            attendance_rate: number;
+            /** Consecutive Absences */
+            consecutive_absences: number;
+            /** Lms Participation */
+            lms_participation: number;
+            /** Late Assignments Rate */
+            late_assignments_rate: number;
+            /** Tuition Debt Months */
+            tuition_debt_months: number;
+            /** Scholarship */
+            scholarship: number;
+            /** Weekly Work Hours */
+            weekly_work_hours: number;
+            /** Commute Minutes */
+            commute_minutes: number;
+            /** Family Support */
+            family_support: number;
+            /** Socioemotional Adaptation */
+            socioemotional_adaptation: number;
+            /** Shift */
+            shift: string;
+            /** Cycle */
+            cycle: number;
+            /** Age */
+            age: number;
+        };
+        /** PipelineErrorOut */
+        PipelineErrorOut: {
+            /** Row */
+            row: number;
+            /** Column */
+            column: string;
+            /** Reason */
+            reason: string;
+        };
+        /** PipelineStepOut */
+        PipelineStepOut: {
+            /** Key */
+            key: string;
+            /** Label */
+            label: string;
+            /** Detail */
+            detail: string;
+        };
         /** RiskByFacultyOut */
         RiskByFacultyOut: {
             /** Faculties */
@@ -415,6 +511,15 @@ export interface components {
             top_factors: components["schemas"]["TopFactorOut"][];
             /** Disclaimer */
             disclaimer: string;
+        };
+        /** RiskDistributionOut */
+        RiskDistributionOut: {
+            /** High */
+            high: number;
+            /** Medium */
+            medium: number;
+            /** Low */
+            low: number;
         };
         /** StudentDetailOut */
         StudentDetailOut: {
@@ -491,6 +596,19 @@ export interface components {
             in_observation: number;
             /** Critical Pending */
             critical_pending: number;
+        };
+        /** UploadResultOut */
+        UploadResultOut: {
+            /** Run Id */
+            run_id: number;
+            /** Steps */
+            steps: components["schemas"]["PipelineStepOut"][];
+            /** Errors */
+            errors: components["schemas"]["PipelineErrorOut"][];
+            distribution_before: components["schemas"]["RiskDistributionOut"];
+            distribution_after: components["schemas"]["RiskDistributionOut"];
+            /** Model View Sample */
+            model_view_sample: components["schemas"]["ModelViewRowOut"][];
         };
         /** UserOut */
         UserOut: {
@@ -856,6 +974,59 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["InterventionOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    upload_template_api_upload_template_csv_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    upload_students_api_upload_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["Body_upload_students_api_upload_post"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UploadResultOut"];
                 };
             };
             /** @description Validation Error */

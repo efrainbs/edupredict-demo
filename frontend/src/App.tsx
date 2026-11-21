@@ -1,5 +1,4 @@
 import type { ReactNode } from "react";
-import { BrainCircuit, UploadCloud } from "lucide-react";
 import {
   Navigate,
   Route,
@@ -11,7 +10,8 @@ import { AppLayout } from "@/components/AppLayout";
 import { FullPageLoading } from "@/components/FullPageLoading";
 import { DashboardPage } from "@/pages/DashboardPage";
 import { LoginPage } from "@/pages/LoginPage";
-import { PlaceholderPage } from "@/pages/PlaceholderPage";
+import { ModelPage } from "@/pages/ModelPage";
+import { UploadPage } from "@/pages/UploadPage";
 import { StudentDetailPage } from "@/pages/StudentDetailPage";
 import { StudentsPage } from "@/pages/StudentsPage";
 import { homePathForRole, useAuth } from "@/lib/auth";
@@ -94,11 +94,7 @@ export default function App() {
           path="/upload"
           element={
             <RoleRoute role="director">
-              <PlaceholderPage
-                icon={UploadCloud}
-                title="Carga de datos"
-                description="La carga de CSV, el pipeline por pasos y la actualización de riesgos se habilitan en el siguiente avance de la demo."
-              />
+              <UploadPage />
             </RoleRoute>
           }
         />
@@ -106,11 +102,7 @@ export default function App() {
           path="/model"
           element={
             <RoleRoute role="director">
-              <PlaceholderPage
-                icon={BrainCircuit}
-                title="Panel de modelo"
-                description="Las métricas del modelo activo y la importancia de variables se habilitan en el siguiente avance de la demo."
-              />
+              <ModelPage />
             </RoleRoute>
           }
         />

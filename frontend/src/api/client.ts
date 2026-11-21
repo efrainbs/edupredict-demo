@@ -15,6 +15,14 @@ export type StudentDetail = components["schemas"]["StudentDetailOut"];
 export type Intervention = components["schemas"]["InterventionOut"];
 export type InterventionCreate = components["schemas"]["InterventionCreate"];
 export type TopFactor = components["schemas"]["TopFactorOut"];
+export type ModelInfo = components["schemas"]["ModelInfoOut"];
+export type FeatureImportance = components["schemas"]["FeatureImportanceOut"];
+export type ModelMetrics = components["schemas"]["ModelMetricsOut"];
+export type UploadResult = components["schemas"]["UploadResultOut"];
+export type PipelineStep = components["schemas"]["PipelineStepOut"];
+export type PipelineError = components["schemas"]["PipelineErrorOut"];
+export type RiskDistribution = components["schemas"]["RiskDistributionOut"];
+export type ModelViewRow = components["schemas"]["ModelViewRowOut"];
 export type RiskLevel = StudentListItem["risk_level"];
 export type InterventionType = Intervention["type"];
 
@@ -66,13 +74,26 @@ export function clearSession(): void {
   window.localStorage.removeItem(USER_KEY);
 }
 
+async function errorFromResponse(response: Response): Promise<ApiError> {
+  let message = "Ocurrió un error inesperado";
+  try {
+    const body = (await response.json()) as { detail?: unknown };
+    if (typeof body.detail === "string") {
+      message = body.detail;
+    }
+  } catch {
+    message = response.statusText || message;
+  }
+  return new ApiError(response.status, message);
+}
+
 async function request<T>(
   path: string,
   init: RequestInit = {},
   authenticated = true,
 ): Promise<T> {
   const headers = new Headers(init.headers);
-  if (init.body && !headers.has("Content-Type")) {
+  if (typeof init.body === "string" && !headers.has("Content-Type")) {
     headers.set("Content-Type", "application/json");
   }
   if (authenticated) {
@@ -90,19 +111,31 @@ async function request<T>(
   }
 
   if (!response.ok) {
-    let message = "Ocurrió un error inesperado";
-    try {
-      const body = (await response.json()) as { detail?: unknown };
-      if (typeof body.detail === "string") {
-        message = body.detail;
-      }
-    } catch {
-      message = response.statusText || message;
-    }
-    throw new ApiError(response.status, message);
+    throw await errorFromResponse(response);
   }
 
   return (await response.json()) as T;
+}
+
+async function requestBlob(path: string): Promise<Blob> {
+  const headers = new Headers();
+  const token = getToken();
+  if (token) {
+    headers.set("Authorization", `Bearer ${token}`);
+  }
+
+  let response: Response;
+  try {
+    response = await fetch(`/api${path}`, { headers });
+  } catch {
+    throw new Error("No se pudo conectar con la API");
+  }
+
+  if (!response.ok) {
+    throw await errorFromResponse(response);
+  }
+
+  return response.blob();
 }
 
 export const api = {
@@ -148,4 +181,11 @@ export const api = {
       method: "POST",
       body: JSON.stringify(payload),
     }),
+  modelInfo: () => request<ModelInfo>("/model/info"),
+  uploadTemplate: () => requestBlob("/upload/template.csv"),
+  uploadCsv: (file: File) => {
+    const body = new FormData();
+    body.append("file", file);
+    return request<UploadResult>("/upload", { method: "POST", body });
+  },
 };
