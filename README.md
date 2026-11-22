@@ -96,6 +96,34 @@ make e2e    # guion automatizado con Playwright
 `make e2e` reutiliza los servidores si ya están corriendo; si no, los levanta. Requiere una
 BD sembrada y un modelo entrenado (`make seed && make train`).
 
+## Despliegue en Render (plan free)
+
+El repo incluye `Dockerfile` y `render.yaml`. La imagen compila el frontend, instala el
+backend y genera los datos y entrena el modelo durante el build, así el servicio arranca con
+datos y modelo listos.
+
+1. Sube el repo a GitHub (ya está en `origin`).
+2. En Render: **New → Blueprint**, selecciona el repo y aplica `render.yaml`.
+   Alternativa: **New → Web Service → Docker** apuntando al repo.
+3. Render asigna una URL `https://<servicio>.onrender.com`. El health check es `/api/meta`.
+
+Notas del plan free:
+
+- El servicio se duerme tras 15 minutos sin tráfico y tarda ~1 minuto en despertar.
+- El filesystem es efímero: las cargas CSV y los seguimientos registrados se pierden al
+  reiniciar o dormir. La demo vuelve al estado del build.
+- `PSEUDO_SECRET` se deja con el valor de desarrollo para que el build y el runtime generen
+  los mismos seudónimos. No uses datos reales ni este despliegue como producción.
+
+Para probar la imagen localmente:
+
+```bash
+docker build -t edupredict-demo .
+docker run --rm -p 8000:8000 -e JWT_SECRET=dev-jwt-secret-change-me-32-bytes-min edupredict-demo
+```
+
+Abre http://localhost:8000 (la API y el frontend se sirven desde el mismo puerto).
+
 ## Documentación
 
 - `docs/ARCHITECTURE.md` — diagrama, flujo de datos y decisiones.
