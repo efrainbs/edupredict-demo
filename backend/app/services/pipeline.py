@@ -365,6 +365,11 @@ def process_upload(
     )
 
     _apply_rows(session, valid_rows, existing)
+    affected_ids = {
+        int(existing[row["code"]].id)
+        for row in valid_rows
+        if existing[row["code"]].id is not None
+    }
 
     steps.append(
         {
@@ -385,6 +390,7 @@ def process_upload(
             "high": float(thresholds["high"]),
             "medium": float(thresholds["medium"]),
         },
+        student_ids=affected_ids,
     )
 
     steps.append(

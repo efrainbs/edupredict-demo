@@ -190,7 +190,7 @@ def test_upload_processes_valid_rows_and_reports_errors(
     assert body["steps"][0]["detail"] == "3 filas recibidas"
     assert body["steps"][1]["detail"] == "2 válidas, 1 rechazadas"
     assert body["steps"][2]["detail"].startswith("2 identificadores")
-    assert body["steps"][3]["detail"].startswith("1501 estudiantes")
+    assert body["steps"][3]["detail"].startswith("2 estudiantes")
 
     assert len(body["errors"]) == 1
     assert body["errors"][0]["row"] == 4
@@ -224,6 +224,11 @@ def test_upload_processes_valid_rows_and_reports_errors(
         assert carlos_alerts
         assert all(alert.status == "cerrada" for alert in carlos_alerts)
         assert all(alert.resolved_at is not None for alert in carlos_alerts)
+
+        untouched = session.exec(
+            select(Student).where(Student.code == "U00000002")
+        ).one()
+        assert session.get(RiskScore, untouched.id) is not None
 
         new_student = session.exec(
             select(Student).where(Student.code == new_code)

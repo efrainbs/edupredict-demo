@@ -112,6 +112,8 @@ Notas del plan free:
 - El servicio se duerme tras 15 minutos sin tráfico y tarda ~1 minuto en despertar.
 - El filesystem es efímero: las cargas CSV y los seguimientos registrados se pierden al
   reiniciar o dormir. La demo vuelve al estado del build.
+- El arranque en frío tarda varios minutos en el plan free. La carga de demo se optimizó
+  para puntuar solo los estudiantes afectados (~10-15 s en 0.1 CPU).
 - `PSEUDO_SECRET` se deja con el valor de desarrollo para que el build y el runtime generen
   los mismos seudónimos. No uses datos reales ni este despliegue como producción.
 

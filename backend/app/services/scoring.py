@@ -24,8 +24,39 @@ def score_students(
     explainer: Any,
     model_version: ModelVersion,
     thresholds: dict[str, float] | None = None,
+    student_ids: set[int] | None = None,
 ) -> dict[str, Any]:
+    students = {
+        student.pseudo_id: student
+        for student in session.exec(select(Student)).all()
+    }
     rows = session.exec(select(StudentFeature)).all()
+    if student_ids is not None:
+        selected_pseudo_ids = {
+            student.pseudo_id
+            for student in students.values()
+            if int(student.id) in student_ids
+        }
+        rows = [row for row in rows if row.pseudo_id in selected_pseudo_ids]
+
+    if not rows:
+        high_threshold = float(thresholds["high"]) if thresholds else 0.0
+        medium_threshold = float(thresholds["medium"]) if thresholds else 0.0
+        return {
+            "scored": 0,
+            "high": 0,
+            "medium": 0,
+            "low": 0,
+            "high_pct": 0.0,
+            "medium_pct": 0.0,
+            "low_pct": 0.0,
+            "high_threshold": round(high_threshold, 6),
+            "medium_threshold": round(medium_threshold, 6),
+            "at_risk_pct": 0.0,
+            "alerts_new": 0,
+            "alerts_closed": 0,
+        }
+
     frame = feature_frame(rows)
     probabilities = model.predict_proba(frame)[:, 1]
 
@@ -44,13 +75,14 @@ def score_students(
 
     shap_values = shap_matrix(explainer, frame)
 
-    students = {
-        student.pseudo_id: student
-        for student in session.exec(select(Student)).all()
-    }
-
-    for existing in session.exec(select(RiskScore)).all():
-        session.delete(existing)
+    if student_ids is None:
+        for existing in session.exec(select(RiskScore)).all():
+            session.delete(existing)
+    else:
+        for student_id in student_ids:
+            existing = session.get(RiskScore, student_id)
+            if existing is not None:
+                session.delete(existing)
     session.flush()
 
     pending_by_student: dict[int, list[Alert]] = {}
@@ -59,7 +91,6 @@ def score_students(
             pending_by_student.setdefault(alert.student_id, []).append(alert)
 
     now = utc_now()
-    counts = {"alto": 0, "medio": 0, "bajo": 0}
     alerts_new = 0
     alerts_closed = 0
 
@@ -88,7 +119,6 @@ def score_students(
                 computed_at=now,
             )
         )
-        counts[level] += 1
 
         pending = pending_by_student.get(int(student.id), [])
         if level in {"alto", "medio"}:
@@ -120,7 +150,15 @@ def score_students(
                 alert.resolved_at = now
                 alerts_closed += 1
 
-    total = len(rows)
+    session.add(model_version)
+    session.flush()
+
+    all_scores = session.exec(select(RiskScore)).all()
+    total = len(all_scores)
+    counts = {"alto": 0, "medio": 0, "bajo": 0}
+    for score in all_scores:
+        counts[score.level] += 1
+
     at_risk = counts["alto"] + counts["medio"]
     at_risk_pct = round(at_risk / total * 100, 1) if total else 0.0
 
@@ -128,12 +166,10 @@ def score_students(
     if snapshot is not None:
         snapshot.projected_risk_pct = at_risk_pct
         session.add(snapshot)
-
-    session.add(model_version)
-    session.flush()
+        session.flush()
 
     return {
-        "scored": total,
+        "scored": len(rows),
         "high": counts["alto"],
         "medium": counts["medio"],
         "low": counts["bajo"],

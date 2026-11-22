@@ -48,7 +48,8 @@ procesamiento de datos personales de estudiantes reales.
 4. **Carga (`/upload`)** — `services/pipeline.py` recibe el CSV, valida filas, seudonimiza
    identificadores, actualiza `student_features`, vuelve a puntuar con los umbrales del
    modelo activo y registra `pipeline_runs` con pasos y distribución antes/después. Las filas
-   inválidas se rechazan sin abortar el resto.
+   inválidas se rechazan sin abortar el resto. Solo se vuelven a puntuar los estudiantes
+   afectados por el archivo; el resto conserva su último `risk_score`.
 
 ## Decisiones
 
