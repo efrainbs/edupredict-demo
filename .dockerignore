@@ -11,7 +11,12 @@ frontend/dist
 frontend/test-results
 frontend/playwright-report
 frontend/blob-report
+frontend/e2e
 
 backend/.venv
+backend/tests
 backend/data
 backend/ml/artifacts
+
+docs
+*.md

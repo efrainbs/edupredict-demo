@@ -21,7 +21,9 @@ COPY backend/requirements.txt ./
 RUN pip install -r requirements.txt
 
 COPY backend/ ./
-RUN python -m ml.generate_data && python -m ml.train
+RUN python -m compileall -q app ml \
+    && python -m ml.generate_data \
+    && python -m ml.train
 
 COPY --from=frontend /app/frontend/dist /app/frontend/dist
 

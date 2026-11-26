@@ -11,7 +11,6 @@ from app.schemas import (
     ModelInfoOut,
     ModelMetricsOut,
 )
-from ml.features import FEATURE_LABELS
 
 router = APIRouter(tags=["model"])
 
@@ -27,6 +26,8 @@ def model_info(
     _user: DirectorDep,
     session: Annotated[Session, Depends(get_session)],
 ) -> ModelInfoOut:
+    from ml.features import FEATURE_LABELS
+
     model = session.exec(
         select(ModelVersion).where(ModelVersion.is_active == True)  # noqa: E712
     ).first()

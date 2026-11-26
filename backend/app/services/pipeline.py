@@ -6,7 +6,6 @@ from pathlib import Path
 from typing import Any
 
 from sqlmodel import Session, select
-from xgboost import XGBClassifier
 
 from app.models import (
     Career,
@@ -19,10 +18,6 @@ from app.models import (
     utc_now,
 )
 from app.services.pseudonymize import pseudo_id_for
-from app.services.scoring import score_students
-from ml.explain import build_explainer
-from ml.features import FEATURE_COLUMNS
-from ml.train import ARTIFACTS_DIR
 
 MAX_UPLOAD_BYTES = 5 * 1024 * 1024
 
@@ -177,6 +172,8 @@ def _validate_row(
     existing_codes: set[str],
     seen_codes: set[str],
 ) -> dict[str, Any]:
+    from ml.features import FEATURE_COLUMNS
+
     code = _required(raw, "student_code")
     if code in seen_codes:
         raise _RowError("student_code", "Código duplicado en el archivo")
@@ -274,6 +271,8 @@ def _distribution(session: Session) -> dict[str, int]:
 
 
 def _model_view_row(feature: StudentFeature) -> dict[str, Any]:
+    from ml.features import FEATURE_COLUMNS
+
     row: dict[str, Any] = {"pseudo_id": feature.pseudo_id}
     for field in FEATURE_COLUMNS:
         row[field] = getattr(feature, field)
@@ -303,7 +302,11 @@ def _model_view_sample(
     return sample[:3]
 
 
-def _load_model() -> tuple[XGBClassifier, Any]:
+def _load_model() -> tuple[Any, Any]:
+    from ml.explain import build_explainer
+    from ml.train import ARTIFACTS_DIR
+    from xgboost import XGBClassifier
+
     path = Path(ARTIFACTS_DIR) / "xgb_model.json"
     if not path.exists():
         raise ModelUnavailableError(
@@ -430,6 +433,8 @@ def process_upload(
             ),
         }
     )
+
+    from app.services.scoring import score_students
 
     summary = score_students(
         session,
