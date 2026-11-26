@@ -15,28 +15,28 @@ from ml.generate_data import seed_database
 from ml.train import train_model
 
 HEADER = [
-    "student_code",
-    "full_name",
-    "gender",
-    "career",
-    "cycle",
-    "tutor_name",
-    "gpa_avg",
-    "grade_trend",
-    "last_exam_grade",
-    "failed_courses",
-    "attendance_rate",
-    "consecutive_absences",
-    "lms_participation",
-    "late_assignments_rate",
-    "tuition_debt_months",
-    "scholarship",
-    "weekly_work_hours",
-    "commute_minutes",
-    "family_support",
-    "socioemotional_adaptation",
-    "shift",
-    "age",
+    "codigo_estudiante",
+    "nombre_completo",
+    "genero",
+    "carrera",
+    "ciclo",
+    "tutor",
+    "promedio_general",
+    "tendencia_notas",
+    "nota_ultimo_examen",
+    "cursos_desaprobados",
+    "tasa_asistencia",
+    "inasistencias_consecutivas",
+    "participacion_lms",
+    "tasa_entregas_tardias",
+    "meses_deuda_matricula",
+    "beca",
+    "horas_trabajo_semanal",
+    "minutos_translado",
+    "apoyo_familiar",
+    "adaptacion_socioemocional",
+    "turno",
+    "edad",
 ]
 
 
@@ -119,28 +119,28 @@ def _row(
     age: int = 20,
 ) -> dict:
     return {
-        "student_code": code,
-        "full_name": name,
-        "gender": gender,
-        "career": career,
-        "cycle": cycle,
-        "tutor_name": tutor,
-        "gpa_avg": gpa,
-        "grade_trend": trend,
-        "last_exam_grade": exam,
-        "failed_courses": failed,
-        "attendance_rate": attendance,
-        "consecutive_absences": absences,
-        "lms_participation": lms,
-        "late_assignments_rate": late,
-        "tuition_debt_months": debt,
-        "scholarship": scholarship,
-        "weekly_work_hours": work,
-        "commute_minutes": commute,
-        "family_support": family,
-        "socioemotional_adaptation": adaptation,
-        "shift": shift,
-        "age": age,
+        "codigo_estudiante": code,
+        "nombre_completo": name,
+        "genero": gender,
+        "carrera": career,
+        "ciclo": cycle,
+        "tutor": tutor,
+        "promedio_general": gpa,
+        "tendencia_notas": trend,
+        "nota_ultimo_examen": exam,
+        "cursos_desaprobados": failed,
+        "tasa_asistencia": attendance,
+        "inasistencias_consecutivas": absences,
+        "participacion_lms": lms,
+        "tasa_entregas_tardias": late,
+        "meses_deuda_matricula": debt,
+        "beca": scholarship,
+        "horas_trabajo_semanal": work,
+        "minutos_translado": commute,
+        "apoyo_familiar": family,
+        "adaptacion_socioemocional": adaptation,
+        "turno": shift,
+        "edad": age,
     }
 
 
@@ -194,7 +194,7 @@ def test_upload_processes_valid_rows_and_reports_errors(
 
     assert len(body["errors"]) == 1
     assert body["errors"][0]["row"] == 4
-    assert body["errors"][0]["column"] == "attendance_rate"
+    assert body["errors"][0]["column"] == "tasa_asistencia"
     assert "rango" in body["errors"][0]["reason"]
 
     assert sum(body["distribution_before"].values()) == 1500

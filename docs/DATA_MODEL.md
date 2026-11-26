@@ -165,11 +165,11 @@ El seed debe garantizar estos 5 estudiantes asignados a **Tutor 1** (Prof. Rober
 ## 9. CSV de carga (`GET /api/upload/template.csv`)
 Una fila por estudiante. Columnas (en este orden):
 ```
-student_code,full_name,gender,career,cycle,tutor_name,
-gpa_avg,grade_trend,last_exam_grade,failed_courses,attendance_rate,consecutive_absences,
-lms_participation,late_assignments_rate,tuition_debt_months,scholarship,weekly_work_hours,
-commute_minutes,family_support,socioemotional_adaptation,shift,age
+codigo_estudiante,nombre_completo,genero,carrera,ciclo,tutor,
+promedio_general,tendencia_notas,nota_ultimo_examen,cursos_desaprobados,tasa_asistencia,inasistencias_consecutivas,
+participacion_lms,tasa_entregas_tardias,meses_deuda_matricula,beca,horas_trabajo_semanal,
+minutos_translado,apoyo_familiar,adaptacion_socioemocional,turno,edad
 ```
-Validaciones (fila rechazada con motivo si falla): código no vacío; `career` existente; `tutor_name` existente (tabla `tutors`) para estudiantes nuevos (para existentes se conserva el tutor); rangos de la tabla §2; `shift` ∈ {diurno, nocturno}; sin duplicados de código en el archivo. Filas válidas se procesan aunque otras se rechacen.
+Validaciones (fila rechazada con motivo si falla): código no vacío; `carrera` existente; `tutor` existente (tabla `tutors`) para estudiantes nuevos (para existentes se conserva el tutor); rangos de la tabla §2; `turno` ∈ {diurno, nocturno}; sin duplicados de código en el archivo. Filas válidas se procesan aunque otras se rechacen. La API también acepta las cabeceras históricas en inglés (`student_code`, `full_name`, …) por compatibilidad.
 
 `make demo-csv` genera `backend/data/demo_upload.csv` con ~200 filas: ~120 estudiantes existentes con indicadores empeorados (más deuda, menos asistencia, menos LMS), **incluido Diego Torres Ruiz** (debe quedar en Alto), 60 existentes sin cambios, 15 estudiantes nuevos y **3 filas inválidas** a propósito (para mostrar la tabla de errores).

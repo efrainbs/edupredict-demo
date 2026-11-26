@@ -89,7 +89,7 @@ Respuesta `text/csv` con la cabecera y 2 filas de ejemplo (columnas en `DATA_MOD
     {"key": "score", "label": "Puntuación", "detail": "197 estudiantes puntuados con modelo v1"},
     {"key": "alerts", "label": "Alertas", "detail": "58 nuevas, 11 cerradas"}
   ],
-  "errors": [{"row": 14, "column": "attendance_rate", "reason": "Valor fuera de rango (1.4)"}],
+  "errors": [{"row": 14, "column": "tasa_asistencia", "reason": "Valor fuera de rango (1.4)"}],
   "distribution_before": {"high": 120, "medium": 255, "low": 1125},
   "distribution_after": {"high": 158, "medium": 270, "low": 1087},
   "model_view_sample": [

@@ -9,6 +9,7 @@ from app.models import User
 from app.schemas import UploadResultOut
 from app.services.pipeline import (
     MAX_UPLOAD_BYTES,
+    CSV_COLUMNS_ES,
     CsvValidationError,
     ModelUnavailableError,
     process_upload,
@@ -18,13 +19,7 @@ router = APIRouter(tags=["upload"])
 
 DirectorDep = Annotated[User, Depends(require_role("director"))]
 
-TEMPLATE_HEADER = (
-    "student_code,full_name,gender,career,cycle,tutor_name,gpa_avg,"
-    "grade_trend,last_exam_grade,failed_courses,attendance_rate,"
-    "consecutive_absences,lms_participation,late_assignments_rate,"
-    "tuition_debt_months,scholarship,weekly_work_hours,commute_minutes,"
-    "family_support,socioemotional_adaptation,shift,age"
-)
+TEMPLATE_HEADER = ",".join(CSV_COLUMNS_ES)
 
 TEMPLATE_ROWS = [
     (

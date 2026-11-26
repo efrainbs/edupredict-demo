@@ -51,6 +51,34 @@ CSV_COLUMNS = [
     "age",
 ]
 
+CSV_HEADER_LABELS = {
+    "student_code": "codigo_estudiante",
+    "full_name": "nombre_completo",
+    "gender": "genero",
+    "career": "carrera",
+    "cycle": "ciclo",
+    "tutor_name": "tutor",
+    "gpa_avg": "promedio_general",
+    "grade_trend": "tendencia_notas",
+    "last_exam_grade": "nota_ultimo_examen",
+    "failed_courses": "cursos_desaprobados",
+    "attendance_rate": "tasa_asistencia",
+    "consecutive_absences": "inasistencias_consecutivas",
+    "lms_participation": "participacion_lms",
+    "late_assignments_rate": "tasa_entregas_tardias",
+    "tuition_debt_months": "meses_deuda_matricula",
+    "scholarship": "beca",
+    "weekly_work_hours": "horas_trabajo_semanal",
+    "commute_minutes": "minutos_translado",
+    "family_support": "apoyo_familiar",
+    "socioemotional_adaptation": "adaptacion_socioemocional",
+    "shift": "turno",
+    "age": "edad",
+}
+
+CSV_COLUMNS_ES = [CSV_HEADER_LABELS[column] for column in CSV_COLUMNS]
+CSV_HEADER_MAP = {label: column for column, label in CSV_HEADER_LABELS.items()}
+
 FLOAT_RANGES = {
     "gpa_avg": (0.0, 20.0),
     "grade_trend": (-5.0, 5.0),
@@ -96,6 +124,15 @@ class _RowError(Exception):
 
 def _clean(value: Any) -> str:
     return str(value).strip() if value is not None else ""
+
+
+def _normalize_header(header: str) -> str | None:
+    name = header.strip()
+    if name in CSV_HEADER_MAP:
+        return CSV_HEADER_MAP[name]
+    if name in CSV_COLUMNS:
+        return name
+    return None
 
 
 def _required(raw: dict[str, Any], column: str) -> str:
@@ -308,17 +345,28 @@ def process_upload(
 
     reader = csv.DictReader(io.StringIO(content))
     fieldnames = reader.fieldnames or []
-    missing = [column for column in CSV_COLUMNS if column not in fieldnames]
+    sources: dict[str, str] = {}
+    for name in fieldnames:
+        internal = _normalize_header(name)
+        if internal is not None and internal not in sources:
+            sources[internal] = name
+    missing = [
+        CSV_HEADER_LABELS[column]
+        for column in CSV_COLUMNS
+        if column not in sources
+    ]
     if missing:
         raise CsvValidationError(
             "Faltan columnas obligatorias: " + ", ".join(missing)
         )
 
-    raw_rows = [
-        row
-        for row in reader
-        if any(_clean(value) for value in row.values())
-    ]
+    raw_rows: list[dict[str, Any]] = []
+    for row in reader:
+        normalized = {
+            internal: row.get(source) for internal, source in sources.items()
+        }
+        if any(_clean(value) for value in normalized.values()):
+            raw_rows.append(normalized)
 
     steps: list[dict[str, str]] = [
         {
@@ -349,7 +397,9 @@ def process_upload(
             errors.append(
                 {
                     "row": line_number,
-                    "column": error.column,
+                    "column": CSV_HEADER_LABELS.get(
+                        error.column, error.column
+                    ),
                     "reason": error.reason,
                 }
             )

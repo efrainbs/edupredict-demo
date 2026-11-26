@@ -13,6 +13,7 @@ sys.path.insert(0, str(ROOT))
 from app.config import DATA_DIR  # noqa: E402
 from app.db import engine  # noqa: E402
 from app.models import Career, Student, StudentFeature, Tutor  # noqa: E402
+from app.services.pipeline import CSV_HEADER_LABELS  # noqa: E402
 from ml.features import FEATURE_COLUMNS  # noqa: E402
 from ml.generate_data import (  # noqa: E402
     FEMALE_NAMES,
@@ -284,7 +285,9 @@ def main() -> None:
     OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
     with OUTPUT_PATH.open("w", newline="", encoding="utf-8") as handle:
         writer = csv.DictWriter(handle, fieldnames=COLUMNS)
-        writer.writeheader()
+        handle.write(
+            ",".join(CSV_HEADER_LABELS[column] for column in COLUMNS) + "\n"
+        )
         writer.writerows(rows)
 
     print(f"demo_upload.csv generado: {OUTPUT_PATH}")
