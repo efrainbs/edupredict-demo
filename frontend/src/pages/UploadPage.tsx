@@ -180,12 +180,12 @@ function ModelView({ result }: { result: UploadResult }) {
         <table className="w-full min-w-[720px] text-left text-xs">
           <thead className="bg-slate-50 text-[10px] uppercase tracking-wider text-slate-500">
             <tr>
-              <th className="px-3 py-2 font-semibold">pseudo_id</th>
-              <th className="px-3 py-2 font-semibold">gpa_avg</th>
-              <th className="px-3 py-2 font-semibold">attendance_rate</th>
-              <th className="px-3 py-2 font-semibold">lms_participation</th>
-              <th className="px-3 py-2 font-semibold">tuition_debt_months</th>
-              <th className="px-3 py-2 font-semibold">failed_courses</th>
+              <th className="px-3 py-2 font-semibold">Seudónimo</th>
+              <th className="px-3 py-2 font-semibold">Promedio</th>
+              <th className="px-3 py-2 font-semibold">Asistencia</th>
+              <th className="px-3 py-2 font-semibold">Participación LMS</th>
+              <th className="px-3 py-2 font-semibold">Deuda (meses)</th>
+              <th className="px-3 py-2 font-semibold">Cursos desaprobados</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100 font-mono text-slate-600">
